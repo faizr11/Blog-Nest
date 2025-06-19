@@ -17,16 +17,40 @@ $stmt = $koneksi->prepare("
     LEFT JOIN article_category ak ON ak.artikel_id = a.id
     LEFT JOIN category k ON k.id = ak.kategori_id
     WHERE a.id = ?
-    LIMIT 1
 ");
-
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
-$article = $result->fetch_assoc();
 
-if (!$article) {
+if (!$result || $result->num_rows === 0) {
     die("Artikel tidak ditemukan.");
 }
+
+$article = null;
+$kategori = [];
+
+while ($row = $result->fetch_assoc()) {
+    if (!$article) {
+        $article = [
+            "id" => $row["id"],
+            "judul" => $row["judul"],
+            "isi" => $row["isi"],
+            "gambar" => $row["gambar"] ? "/TheBlogNest/" . $row["gambar"] : null,
+            "creator_nama" => $row["creator_nama"],
+            "created_at" => $row["created_at"],
+            "tanggal_publikasi" => $row["tanggal_publikasi"],
+            "kutipan" => $row["kutipan"],
+            "kategori" => []
+        ];
+    }
+
+    // ✅ Tambahkan kategori ke array kategori jika belum ada
+    if ($row["kategori_nama"] && !in_array($row["kategori_nama"], $kategori)) {
+        $kategori[] = $row["kategori_nama"];
+    }
+}
+
+// ✅ Ubah array kategori jadi string
+$article["kategori"] = implode(", ", $kategori);
 
 return $article;

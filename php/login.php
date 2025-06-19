@@ -1,6 +1,6 @@
 <?php
-include 'koneksi.php';
 session_start();
+include 'koneksi.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,10 +33,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['foto_profil'] = $user['foto_profil'];
         $_SESSION['bio'] = $user['bio'];
 
+
+        // Tentukan redirect berdasarkan role
+        $redirect = 'index.php'; // default
+        if ($user['role'] === 'admin') {
+            $redirect = 'admin/admin.php';
+        }
+
         echo json_encode([
             'success' => true,
             'message' => 'Login berhasil.',
-            'redirect' => 'index.php'
+            'redirect' => $redirect
         ]);
     } else {
         echo json_encode([

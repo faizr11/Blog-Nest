@@ -1,13 +1,7 @@
 <?php
+session_start();
 $articles = require 'php/artikel/read.php';
-$categories = [
-    ['slug' => 'webdev', 'name' => 'Web Development', 'icon' => '🌐', 'count' => 125],
-    ['slug' => 'javascript', 'name' => 'JavaScript', 'icon' => '📜', 'count' => 98],
-    ['slug' => 'python', 'name' => 'Python', 'icon' => '🐍', 'count' => 87],
-    ['slug' => 'react', 'name' => 'React', 'icon' => '⚛️', 'count' => 76],
-    ['slug' => 'database', 'name' => 'Databases', 'icon' => '💾', 'count' => 65],
-    ['slug' => 'design', 'name' => 'UI/UX Design', 'icon' => '🎨', 'count' => 54]
-];
+$categories = require 'php/categories/read.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,18 +41,17 @@ $categories = [
                 <a href="articles.php" class="view-all-link">View All Articles</a>
             </div>
             <div class="row">
-                <?php foreach (array_slice($articles, 0, 5) as $article): ?>
-                    <a href="readartikel.php?id=<?= urlencode($article['id']) ?>"
+                <?php foreach (array_slice($articles, 0, 6) as $article): ?>
+                    <a class="card" href="readartikel.php?id=<?= urlencode($article['id']) ?>"
                         style="text-decoration: none; color: inherit;">
-                        <div class="card" style="cursor: pointer;">
+                        <div  style="cursor: pointer;">
                             <h2><?= htmlspecialchars($article['judul']) ?></h2>
                             <?php if ($article['gambar']): ?>
-                                <img src="<?= htmlspecialchars($article['gambar'], ENT_QUOTES, 'UTF-8') ?>" alt="gambar"
-                                    style="max-width:200px;">
+                                <img src="<?= htmlspecialchars($article['gambar'], ENT_QUOTES, 'UTF-8') ?>" alt="image">
                             <?php endif; ?>
                             <p><?= nl2br(htmlspecialchars($article['kutipan'])) ?></p>
-                            <p><strong>Kategori:</strong> <?= htmlspecialchars($article['kategori']) ?></p>
-                            <p><strong>Tanggal:</strong> <?= htmlspecialchars($article['tanggal_publikasi']) ?></p>
+                            <p><strong>Categorie:</strong> <?= htmlspecialchars($article['kategori']) ?></p>
+                            <p><strong>Date:</strong> <?= htmlspecialchars($article['tanggal_publikasi']) ?></p>
                         </div>
                     </a>
                 <?php endforeach; ?>
@@ -67,22 +60,22 @@ $categories = [
     </section>
 
     <section class="section bg-light categories-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Categories</h2>
-                <a href="categories.php" class="view-all-link">View All Categories</a>
-            </div>
-            <div class="categories-grid">
-                <?php foreach ($categories as $category): ?>
-                    <div class="category-card">
-                        <div class="category-icon"><?= htmlspecialchars($category['icon']) ?></div>
-                        <h3><?= htmlspecialchars($category['name']) ?></h3>
-                        <p><?= htmlspecialchars($category['count']) ?> Articles</p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+    <div class="container">
+        <div class="section-header">
+            <h2>Categories</h2>
+            <a href="categories.php" class="view-all-link">View All Categories</a>
         </div>
-    </section>
+        <div class="categories-grid">
+            <?php foreach (array_slice($categories, 0, 7) as $category): ?>
+                <div class="category-card">
+                    <h3><?= htmlspecialchars($category['nama']) ?></h3>
+                    <p><?= htmlspecialchars($category['count']) ?> Articles</p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
 
 
 

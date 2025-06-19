@@ -1,100 +1,79 @@
+<?php
+session_start();
+$articles = require 'php/artikel/read.php';
 
+// Tangkap query dari form
+$query = trim($_GET['q'] ?? '');
+
+// Filter artikel berdasarkan judul
+$filteredArticles = [];
+
+if ($query !== '') {
+    foreach ($articles as $article) {
+        if (stripos($article['judul'], $query) !== false) {
+            $filteredArticles[] = $article;
+        }
+    }
+} else {
+    $filteredArticles = $articles; // jika tidak ada query, tampilkan semua
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BlogHub - Search</title>
-    <link rel="stylesheet" href="css/normalize.css" />
-    <link rel="stylesheet" href="css/style.css" />
+    <title>The Blog Nest - A Platform for Sharing Knowledge</title>
+    <link rel="stylesheet" href="css/gaya.css">
 </head>
 
 <body>
-    <div id="navbar-container"></div>
+    <?php include 'navbar.php'; ?>
 
-    <!-- Search Section -->
     <section class="section">
         <div class="container">
             <h1 class="text-center">Search Articles</h1>
 
-            <form class="search-bar search-form mb-30" id="search-form">
-                <input type="text" id="search-input" class="form-control search-input"
-                    placeholder="Search articles..." />
+            <form class="search-bar search-form mb-30" method="GET" action="">
+                <input
+                    type="text"
+                    class="form-control search-input"
+                    name="q"
+                    placeholder="Search articles..."
+                    value="<?= htmlspecialchars($query) ?>"
+                >
                 <button type="submit" class="search-button">🔍</button>
             </form>
 
-            <div class="search-results">
-                <h2>Results for: <span class="search-query">All Articles</span></h2>
-                <div class="row search-results-container">
-                    <!-- Articles will be rendered here -->
-                </div>
+            <?php if ($query !== ''): ?>
+                <p class="text-center">Showing results for "<strong><?= htmlspecialchars($query) ?></strong>"</p>
+            <?php endif; ?>
+
+            <div class="row">
+                <?php if (count($filteredArticles) > 0): ?>
+                    <?php foreach ($filteredArticles as $article): ?>
+                        <a class="card" href="readartikel.php?id=<?= urlencode($article['id']) ?>"
+                            style="text-decoration: none; color: inherit;">
+                            <div style="cursor: pointer;">
+                                <h2><?= htmlspecialchars($article['judul']) ?></h2>
+                                <?php if ($article['gambar']): ?>
+                                    <img src="<?= htmlspecialchars($article['gambar'], ENT_QUOTES, 'UTF-8') ?>" alt="image">
+                                <?php endif; ?>
+                                <p><?= nl2br(htmlspecialchars($article['kutipan'])) ?></p>
+                                <p><strong>Categorie:</strong> <?= htmlspecialchars($article['kategori']) ?></p>
+                                <p><strong>Date:</strong> <?= htmlspecialchars($article['tanggal_publikasi']) ?></p>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-center">No articles found for your search.</p>
+                <?php endif; ?>
             </div>
         </div>
     </section>
 
     <?php include 'footer.php'; ?>
-
-    <script>
-        const searchForm = document.getElementById("search-form");
-        const searchInput = document.getElementById("search-input");
-        const resultContainer = document.querySelector(".search-results-container");
-        const querySpan = document.querySelector(".search-query");
-
-        function renderArticles(articles) {
-            resultContainer.innerHTML = "";
-            if (articles.length === 0) {
-                resultContainer.innerHTML = "<p>No articles found.</p>";
-                return;
-            }
-
-            articles.forEach((article) => {
-                const card = document.createElement("div");
-                card.className = "col col-4";
-                card.innerHTML = `
-          <div class="card">
-            <img src="${article.gambar || 'default.jpg'}" alt="${article.judul}" class="card-img" />
-            <div class="card-body">
-              <h3>${article.judul}</h3>
-              <p>${article.isi.substring(0, 100)}...</p>
-              <p><small>${article.tanggal_publikasi}</small></p>
-            </div>
-          </div>
-        `;
-                resultContainer.appendChild(card);
-            });
-        }
-
-        function loadArticles(keyword = "") {
-            fetch(`api/read.php`)
-                .then((res) => res.json())
-                .then((data) => {
-                    const filtered = keyword
-                        ? data.filter((item) =>
-                            item.judul.toLowerCase().includes(keyword.toLowerCase())
-                        )
-                        : data;
-                    renderArticles(filtered);
-                })
-                .catch((err) => {
-                    resultContainer.innerHTML = "<p>Failed to load articles.</p>";
-                    console.error(err);
-                });
-        }
-
-        searchForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-            const keyword = searchInput.value.trim();
-            querySpan.textContent = keyword || "All Articles";
-            loadArticles(keyword);
-        });
-
-        // Load all articles on first load
-        window.addEventListener("DOMContentLoaded", () => {
-            loadArticles();
-        });
-    </script>
-    <script src="js/script.js"></script>
 </body>
 
 </html>

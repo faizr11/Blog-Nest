@@ -1,0 +1,74 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+  }
+
+.chart-container-wrapper {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-left: 220px;
+    width: 100%;
+    justify-content: center;
+}
+
+.chart-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-top: 20px;
+    width: 43%;
+}
+
+.chart {
+    height: 350px; 
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.bar-group {
+    display: flex;
+    flex-direction: column-reverse; 
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+}
+
+
+.bar {
+    width: 20px;
+    border-radius: 4px;
+    min-height: 5px;
+}
+
+
+
+/* Label di bawah grafik */
+.label {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* Legenda */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.color-box {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    display: inline-block;
+}
