@@ -18,7 +18,7 @@
             <input type="email" id="email" name="email" required>
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" minlength="8" required>
 
             <button type="submit">Daftar</button>
         </form>

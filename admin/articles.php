@@ -35,7 +35,7 @@ if ($_SESSION['role'] !== 'admin') {
                 <?php foreach ($articles as $article): ?>
                     <tr>
                         <td>
-                            <a href="readartikel.php?id=<?= urlencode($article['id']) ?>"
+                            <a href="../readartikel.php?id=<?= urlencode($article['id']) ?>"
                                 style="text-decoration: none; color: inherit;">
                                 <?= htmlspecialchars($article['judul']) ?>
                             </a>

@@ -49,7 +49,7 @@ if (!isset($_SESSION['id'])) {
 
                         <div class="form-group">
                             <label for="gambar" class="form-label">Featured Image</label>
-                            <input type="file" id="gambar" class="form-control" accept="image/*">
+                            <input type="file" id="gambar" class="form-control" accept=".jpg, .jpeg, .png">
                         </div>
 
                         <div class="form-group">

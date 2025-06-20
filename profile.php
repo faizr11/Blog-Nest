@@ -58,8 +58,11 @@ if (!isset($_SESSION['id'])) {
                         Logout
                     </button>
                 </form>
-
+                <?php if ($_SESSION['role'] === "admin") { ?>
+                    <a href="admin/admin.php" class="btn btn-primary">Admin</a>
+                <?php } ?>
             </div>
+
 
             <h2>Articles by <?php echo $_SESSION['nama']; ?></h2>
 
@@ -135,8 +138,9 @@ if (!isset($_SESSION['id'])) {
 
                 <div class="form-group">
                     <label for="profile-password" class="form-label">Password</label>
-                    <input type="password" id="profile-password" name="password" class="form-control">
+                    <input type="password" id="profile-password" name="password" class="form-control" minlength="8">
                 </div>
+                
 
                 <div class="form-group">
                     <label for="profile-bio" class="form-label">Bio</label>
